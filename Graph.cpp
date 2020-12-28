@@ -7,6 +7,10 @@ class Graph {
         vector<vector<int>> pheromone;
     public:
         Graph(const int& = 1);
+        Graph(const Graph&);
+        Graph(Graph&&);
+        Graph operator= (const Graph&);
+        Graph operator= (Graph&&);
         ~Graph();
         void setLength(const int&, const int&, const int&);
         void setPheromone(const int&, const int&, const int&);
@@ -18,6 +22,22 @@ class Graph {
 Graph::Graph(const int& nVertices) : nVertices(nVertices) {
     this->map = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
     this->pheromone = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
+}
+Graph(const Graph& rVal) {
+    this->map = rVal.map;
+    this->pheromone = rVal.pheromone;
+}
+Graph(Graph&& rVal) {
+    this->map = std::move(rVal.map);
+    this->pheromone = std::move(rVal.pheromone);
+}
+Graph operator= (const Graph& rVal) {
+    this->map = rVal.map;
+    this->pheromone = rVal.pheromone;
+}
+Graph operator= (Graph&& rVal) {
+    this->map = std::move(rVal.map);
+    this->pheromone = std::move(rVal.pheromone);
 }
 Graph::~Graph() {}
 void Graph::validate(const int& vFrom, const int& vTo) {
