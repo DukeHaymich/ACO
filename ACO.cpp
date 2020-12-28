@@ -12,8 +12,7 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
     this->ALPHA = 1;
     this->BETA = 1;
     this->RHO = 0.8;
-    // Random seed
-    srand(time(NULL));
+    srand(17 * nVertices + nAnts);
 }
 
 // Calc Length of Route of k_th Ant
@@ -156,6 +155,20 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex){
 
 void ACO::addEdge(const int& i, const int& j, const int& length) {
     this->map[i][j] = length;
+}
+
+string ACO::result() {
+    stringstream ss;
+
+    ss << "Number of ants worked: " << this->NumberOfAnt
+       << "\nNumber of vertices: " << this->NumberOfVertex
+       << "\nALPHA: " << this->ALPHA << "\tBETA: " << this->BETA << "\tRHO: " << this->RHO
+       << "\nBest length: " << this->BEST_LENGTH
+       << "\nTraverse order:";
+    for (size_t i = 0; i < this->BEST_ROUTE.size(); ++i) {
+        ss << ' ' << BEST_ROUTE[i];
+    }
+    return ss.str();
 }
 
 void ACO::setAlpha(const double& a) {

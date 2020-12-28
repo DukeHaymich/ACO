@@ -1,7 +1,9 @@
+#include <type_traits>
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
+#include <string.h>
+#include <sstream>
 
 using namespace std;
 
@@ -22,12 +24,13 @@ class ACO {
         int BEST_LENGTH;
         vector<int> BEST_ROUTE;
     public:
-        ACO(const int&, const int&, const int& = 0);
-        void addEdge(const int&, const int&, const int&);
-        void optimze(const int&, const int&);
-        void setAlpha(const double&);
-        void setBeta(const double&);
-        void setRho(const double&);
+        ACO(const int& nVertices, const int& nAnts, const int& initVertex = 0);
+        void addEdge(const int& i, const int& j, const int& length);
+        void optimze(const int& ITERATION, const int& InitVertex = 0);
+        void setAlpha(const double& a);
+        void setBeta(const double& b);
+        void setRho(const double& r);
+        string result();
     private:
         int length_of_route(const int&);
         int predict_Vertex();
