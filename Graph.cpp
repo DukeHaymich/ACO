@@ -1,4 +1,5 @@
-#include <vector>
+#include<bits/stdc++.h>
+using namespace std; 
 
 class Graph {
     private:
@@ -16,30 +17,32 @@ class Graph {
         void setPheromone(const int&, const int&, const int&);
         int getLength(const int&, const int&);
         int getPheromone(const int&, const int&);
+        int countVertices();
     private:
-        void validate();
+        void validate(const int&, const int&);
 };
 Graph::Graph(const int& nVertices) : nVertices(nVertices) {
     this->map = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
     this->pheromone = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
 }
-Graph(const Graph& rVal) {
+Graph::Graph(const Graph& rVal) {
     this->map = rVal.map;
     this->pheromone = rVal.pheromone;
 }
-Graph(Graph&& rVal) {
+Graph::Graph(Graph&& rVal) {
     this->map = std::move(rVal.map);
     this->pheromone = std::move(rVal.pheromone);
 }
-Graph operator= (const Graph& rVal) {
+Graph Graph::operator= (const Graph& rVal) {
     this->map = rVal.map;
     this->pheromone = rVal.pheromone;
 }
-Graph operator= (Graph&& rVal) {
+Graph Graph::operator= (Graph&& rVal) {
     this->map = std::move(rVal.map);
     this->pheromone = std::move(rVal.pheromone);
 }
 Graph::~Graph() {}
+
 void Graph::validate(const int& vFrom, const int& vTo) {
     if (vFrom < 0 || vFrom >= this->nVertices || vTo < 0 || vTo >= this->nVertices) {
         throw std::out_of_range("The vertex number is invalid (out of range)!");
@@ -60,4 +63,7 @@ int Graph::getLength(const int& vFrom, const int& vTo) {
 int Graph::getPheromone(const int& vFrom, const int& vTo) {
     validate(vFrom, vTo);
     return this->pheromone[vFrom][vTo];
+}
+int Graph::countVertices() {
+    return this->nVertices;
 }
