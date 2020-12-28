@@ -12,6 +12,8 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
     this->ALPHA = 1;
     this->BETA = 1;
     this->RHO = 0.8;
+    this->BEST_LENGTH = INT_MAX;
+    // Random seed
     srand(17 * nVertices + nAnts);
 }
 
@@ -19,9 +21,9 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
 int ACO::length_of_route(const int& antk) {
     int sum=0, i=0;
     for(; i<NumberOfVertex-1; i++){
-        sum+=map[RouteOfAnt[antk][i]] [RouteOfAnt[antk][i+1]];
+        sum += map[RouteOfAnt[antk][i]] [RouteOfAnt[antk][i+1]];
     }
-    sum+=map[RouteOfAnt[antk][i]] [InitVertex];
+    sum += map[RouteOfAnt[antk][i]] [InitVertex];
     return sum;
 }
 //Pick random 1 city
@@ -138,7 +140,7 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex){
             if(route_length<BEST_LENGTH){
                 BEST_LENGTH=route_length;
                 for(int k=0;k<NumberOfVertex; k++){
-                    BEST_ROUTE[k]=RouteOfAnt[antk][k];
+                    BEST_ROUTE.push_back(RouteOfAnt[antk][k]);
                 }
             }
         }
@@ -162,7 +164,7 @@ string ACO::result() {
 
     ss << "Number of ants worked: " << this->NumberOfAnt
        << "\nNumber of vertices: " << this->NumberOfVertex
-       << "\nALPHA: " << this->ALPHA << "\tBETA: " << this->BETA << "\tRHO: " << this->RHO
+       << "\nALPHA: " << this->ALPHA << "\tBETA: " << this->BETA << "\t\tRHO: " << this->RHO
        << "\nBest length: " << this->BEST_LENGTH
        << "\nTraverse order:";
     for (size_t i = 0; i < this->BEST_ROUTE.size(); ++i) {

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sstream>
+#include <climits>
 
 using namespace std;
 
