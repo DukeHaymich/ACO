@@ -1,50 +1,43 @@
+#include <vector>
+
 class Graph {
-    public:
-        class Vertex;
     private:
-        vector<Vertex> *vertices;
+        int nVertices;
+        vector<vector<int>> map;
+        vector<vector<int>> pheromone;
     public:
-        Graph (const int& nVertices = 1) {
-            this->vertices = new vector<Vertex>(nVertices, Vertex());
-        }
-        Graph (const Graph& rVal) {
-            this->vertices = rVal.vertices;
-        }
-        Graph (Graph&& rVal) {
-            this->vertices = std::move(rVal.vertices);
-        }
-        Graph operator= (const Graph& rVal) {
-            this->vertices = rVal.vertices;
-            return *this;
-        }
-        Graph operator= (Graph&& rVal) {
-            this->vertices = std::move(rVal.vertices);
-            return *this;
-    }
-    ~Graph () {
-        delete this->vertices;
-    }
-    public:
-        class Vertex {
-            public:
-                class Edge;
-            private:
-                static int count;
-                int id;
-                T data;
-                list<Edge> adj;
-                friend class Graph;
-            public:
-                class Edge {
-                    private:
-                        int *length;
-                        int *pheromone;
-                        Vertex *tail;
-                    public:
-                        Edge(const T& tail, const int& length = 0) {
-                            this->datTenGiBayGio = 
-                        }
-                };
-            public:
-        };
+        Graph(const int& = 1);
+        ~Graph();
+        void setLength(const int&, const int&, const int&);
+        void setPheromone(const int&, const int&, const int&);
+        int getLength(const int&, const int&);
+        int getPheromone(const int&, const int&);
+    private:
+        void validate();
 };
+Graph::Graph(const int& nVertices) : nVertices(nVertices) {
+    this->map = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
+    this->pheromone = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
+}
+Graph::~Graph() {}
+void Graph::validate(const int& vFrom, const int& vTo) {
+    if (vFrom < 0 || vFrom >= this->nVertices || vTo < 0 || vTo >= this->nVertices) {
+        throw std::out_of_range("The vertex number is invalid (out of range)!");
+    }
+}
+void Graph::setLength(const int& vFrom, const int& vTo, const int& length) {
+    validate(vFrom, vTo);
+    this->map[vFrom][vTo] = length;
+}
+void Graph::setPheromone(const int& vFrom, const int& vTo, const int& pheromone) {
+    validate(vFrom, vTo);
+    this->pheromone[vFrom][vTo] = pheromone;
+}
+int Graph::getLength(const int& vFrom, const int& vTo) {
+    validate(vFrom, vTo);
+    return this->map[vFrom][vTo];
+}
+int Graph::getPheromone(const int& vFrom, const int& vTo) {
+    validate(vFrom, vTo);
+    return this->pheromone[vFrom][vTo];
+}
