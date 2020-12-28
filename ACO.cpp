@@ -21,7 +21,7 @@ int ACO::length_of_route(const int& antk) {
     for(; i<NumberOfVertex-1; i++){
         sum+=map[RouteOfAnt[antk][i]] [RouteOfAnt[antk][i+1]];
     }
-    sum+=map[RouteOfAnt[antk][i+1]] [InitVertex];
+    sum+=map[RouteOfAnt[antk][i]] [InitVertex];
     return sum;
 }
 //Pick random 1 city
