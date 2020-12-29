@@ -110,9 +110,9 @@ bool ACO::checkvalidRoute(const int& antk) {
 void ACO::updatePheromone() {
     for (int i = 0; i < NumberOfAnt; i++) {
         int route_length = length_of_route(i);
-        for (int j = 0; j < NumberOfVertex - 1; j++) {
+        for (int j = 0; j < NumberOfVertex; j++) {
             int vertex_i = RouteOfAnt[i][j];
-            int vertex_j = (j == NumberOfVertex-2) ? InitVertex : RouteOfAnt[i][j + 1];
+            int vertex_j = (j == NumberOfVertex-1) ? InitVertex : RouteOfAnt[i][j + 1];
             DeltaPheromone[vertex_i][vertex_j] += 1.0 / route_length;
             DeltaPheromone[vertex_j][vertex_i] += 1.0 / route_length;
 
