@@ -4,14 +4,14 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
     this->NumberOfVertex = nVertices;
     this->NumberOfAnt = nAnts;
     this->map = vector<vector<int>>(nVertices, vector<int>(nVertices, 0));
-    this->Pheromone = vector<vector<int>>(nVertices, vector<int>(nVertices, 1));
+    this->Pheromone = vector<vector<double>>(nVertices, vector<double>(nVertices, 1.0));
     this->DeltaPheromone = vector<vector<double>>(nVertices, vector<double>(nVertices, 0));
     this->RouteOfAnt = vector<vector<int>>(nAnts, vector<int>(nVertices, -1));
     this->Prob = vector<vector<double>>(nVertices, vector<double>(2, 0));
     this->InitVertex = initVertex;
-    this->ALPHA = 1;
+    this->ALPHA = 0.8;
     this->BETA = 1;
-    this->RHO = 0.8;
+    this->RHO = 0.3;
     this->BEST_LENGTH = INT_MAX;
     this->BEST_ROUTE = vector<int>(nVertices, -1);
     // Random seed
@@ -48,8 +48,8 @@ double ACO::sum_Of_P(const int& i, const int& antk) {
     for (int j = 0; j < NumberOfVertex; j++) {
         if (map[i][j] != 0) {
             if (!visited(antk, j)) {
-                double temp = (double)pow(Pheromone[i][j], ALPHA);
-                temp /= (double)pow(map[i][j], BETA);
+                double temp = pow(Pheromone[i][j], ALPHA);
+                temp /= pow(map[i][j], BETA);
                 sum += temp;
             }
         }
@@ -58,8 +58,8 @@ double ACO::sum_Of_P(const int& i, const int& antk) {
 }
 // Calc probability
 double ACO::P(const int& i, const int& j, const int& antk, const double& sum_Of_P) {
-    double T = (double)pow(Pheromone[i][j], ALPHA);
-    double N = (double)pow(map[i][j], BETA);
+    double T = pow(Pheromone[i][j], ALPHA);
+    double N = pow(map[i][j], BETA);
     T /= N;
     T /= sum_Of_P;
     return T;
@@ -112,15 +112,15 @@ void ACO::updatePheromone() {
         int route_length = length_of_route(i);
         for (int j = 0; j < NumberOfVertex - 1; j++) {
             int vertex_i = RouteOfAnt[i][j];
-            int vertex_j = RouteOfAnt[i][j + 1];
-            DeltaPheromone[vertex_i][vertex_j] += 1 / route_length;
-            DeltaPheromone[vertex_j][vertex_i] += 1 / route_length;
+            int vertex_j = (j == NumberOfVertex-2) ? InitVertex : RouteOfAnt[i][j + 1];
+            DeltaPheromone[vertex_i][vertex_j] += 1.0 / route_length;
+            DeltaPheromone[vertex_j][vertex_i] += 1.0 / route_length;
 
         }
     }
     for (int i = 0; i < NumberOfVertex; i++) {
         for (int j = 0; j < NumberOfVertex; j++) {
-            Pheromone[i][j] += (Pheromone[i][j] * (1 - RHO) + DeltaPheromone[i][j]);
+            Pheromone[i][j] = Pheromone[i][j] * (1.0 - RHO) + (double)DeltaPheromone[i][j];
             DeltaPheromone[i][j] = 0.0;
         }
     }
@@ -138,7 +138,6 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex) {
             }
             int route_length = length_of_route(antk);
             if (route_length < BEST_LENGTH) {
-                cout << "Update new length-route in " << i << "\n";
                 BEST_LENGTH = route_length;
                 for (int k = 0; k < NumberOfVertex; k++) {
                     BEST_ROUTE[k] = RouteOfAnt[antk][k];

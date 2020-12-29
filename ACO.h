@@ -18,7 +18,7 @@ class ACO {
         double BETA;
         double RHO;
         vector<vector<int>> map;
-        vector<vector<int>> Pheromone;
+        vector<vector<double>> Pheromone;
         vector<vector<double>> DeltaPheromone;
         vector<vector<int>> RouteOfAnt;
         vector<vector<double>> Prob;
