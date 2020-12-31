@@ -159,12 +159,11 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex) {
             }
         }
         
-        if (double(i + 1) * 50.0 / ITERATION > progress) {
+        if (double(i + 1) * 50.0 / ITERATION > progress)
             progress += ceil(50.0 / ITERATION);
-            for (int _ = 0; _ < progress; _++)
-                cout << '#';
-            cout << '\r';
-        }
+        for (int _ = 0; _ < progress; _++)
+            cout << '#';
+        cout << ' ' << int((i + 1.0) / ITERATION * 100) << "%\r";
     }
     cout << "\n-----------------------DONE-----------------------\n"
          << result() << endl;
