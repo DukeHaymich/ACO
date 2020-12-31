@@ -1,9 +1,10 @@
 #include <type_traits>
-#include <climits>
+#include <limits.h>
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <random>
 #include <sstream>
 #include <iostream>
 
@@ -17,11 +18,16 @@ class ACO {
         double ALPHA;
         double BETA;
         double RHO;
+        double Q;
         vector<vector<int>> map;
         vector<vector<double>> Pheromone;
         vector<vector<double>> DeltaPheromone;
         vector<vector<int>> RouteOfAnt;
         vector<vector<double>> Prob;
+        // Random factor
+        std::random_device rd;
+        std::mt19937 mt;
+        std::uniform_real_distribution<double> dist;
         // Result
         int BEST_LENGTH;
         vector<int> BEST_ROUTE;
@@ -32,6 +38,7 @@ class ACO {
         void setAlpha(const double& a);
         void setBeta(const double& b);
         void setRho(const double& r);
+        void setQ(const double& q);
         string result();
     private:
         int length_of_route(const int&);
@@ -43,4 +50,5 @@ class ACO {
         void route(const int&);
         bool checkvalidRoute(const int&);
         void updatePheromone();
+        void flush();
 };

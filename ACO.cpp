@@ -9,13 +9,16 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
     this->RouteOfAnt = vector<vector<int>>(nAnts, vector<int>(nVertices, -1));
     this->Prob = vector<vector<double>>(nVertices, vector<double>(2, 0));
     this->InitVertex = initVertex;
-    this->ALPHA = 0.8;
-    this->BETA = 1;
+    this->ALPHA = 0.7;
+    this->BETA = 3.5;
     this->RHO = 0.3;
+    this->Q = 1.0;
     this->BEST_LENGTH = INT_MAX;
     this->BEST_ROUTE = vector<int>(nVertices, -1);
     // Random seed
-    srand(17 * nVertices + nAnts);
+    //srand(17 * nVertices * nAnts);
+    mt = std::mt19937 (rd());
+    dist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 // Calc Length of Route of k_th Ant
@@ -40,7 +43,8 @@ int ACO::predict_Vertex() {
 }
 // Random generator
 double ACO::random() {
-    return (double)rand() / RAND_MAX;
+    //return (double)rand() / RAND_MAX;
+    return dist(mt);
 }
 // Calc denominator of probability
 double ACO::sum_Of_P(const int& i, const int& antk) {
@@ -112,10 +116,9 @@ void ACO::updatePheromone() {
         int route_length = length_of_route(i);
         for (int j = 0; j < NumberOfVertex; j++) {
             int vertex_i = RouteOfAnt[i][j];
-            int vertex_j = (j == NumberOfVertex-1) ? InitVertex : RouteOfAnt[i][j + 1];
-            DeltaPheromone[vertex_i][vertex_j] += 1.0 / route_length;
-            DeltaPheromone[vertex_j][vertex_i] += 1.0 / route_length;
-
+            int vertex_j = (j == NumberOfVertex - 1) ? InitVertex : RouteOfAnt[i][j + 1];
+            DeltaPheromone[vertex_i][vertex_j] += Q / route_length;
+            DeltaPheromone[vertex_j][vertex_i] += Q / route_length;
         }
     }
     for (int i = 0; i < NumberOfVertex; i++) {
@@ -128,6 +131,9 @@ void ACO::updatePheromone() {
 
 void ACO::optimze(const int& ITERATION, const int& InitVertex) {
     this->InitVertex = InitVertex;
+    int progress = 0;
+    cout << "Working on it...\n"
+         << "--------------------------------------------------" << endl;
     for (int i = 0; i < ITERATION; i++) {
         for (int antk = 0; antk < NumberOfAnt; antk++) {
             while (!checkvalidRoute(antk)) {
@@ -152,7 +158,16 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex) {
                 RouteOfAnt[k][l] = -1;
             }
         }
+        
+        if (double(i + 1) / ITERATION * 50 > progress) {
+            for (int _ = 0; _ <= progress; _++)
+                cout << '#';
+            progress++;
+            cout << '\r';
+        }
     }
+    cout << "\n-----------------------DONE-----------------------\n"
+         << result() << endl;
 }
 
 void ACO::addEdge(const int& i, const int& j, const int& length) {
@@ -181,4 +196,7 @@ void ACO::setBeta(const double& b) {
 }
 void ACO::setRho(const double& r) {
     this->RHO = r;
+}
+void ACO::setQ(const double& q) {
+    this->Q = q;
 }
