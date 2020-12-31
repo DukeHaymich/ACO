@@ -17,7 +17,7 @@ ACO::ACO(const int& nVertices, const int& nAnts, const int& initVertex) {
     this->BEST_ROUTE = vector<int>(nVertices, -1);
     // Random seed
     //srand(17 * nVertices * nAnts);
-    mt = std::mt19937 (rd());
+    mt = std::mt19937(time(NULL));
     dist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
@@ -159,10 +159,10 @@ void ACO::optimze(const int& ITERATION, const int& InitVertex) {
             }
         }
         
-        if (double(i + 1) / ITERATION * 50 > progress) {
-            for (int _ = 0; _ <= progress; _++)
+        if (double(i + 1) * 50.0 / ITERATION > progress) {
+            progress += ceil(50.0 / ITERATION);
+            for (int _ = 0; _ < progress; _++)
                 cout << '#';
-            progress++;
             cout << '\r';
         }
     }

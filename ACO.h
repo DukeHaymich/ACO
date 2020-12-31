@@ -2,8 +2,8 @@
 #include <limits.h>
 #include <vector>
 #include <math.h>
-#include <stdlib.h>
-#include <string.h>
+#include <string>
+#include <ctime>
 #include <random>
 #include <sstream>
 #include <iostream>
@@ -25,7 +25,6 @@ class ACO {
         vector<vector<int>> RouteOfAnt;
         vector<vector<double>> Prob;
         // Random factor
-        std::random_device rd;
         std::mt19937 mt;
         std::uniform_real_distribution<double> dist;
         // Result

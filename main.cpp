@@ -23,7 +23,7 @@ int main() {
         {246, 745, 472, 237, 528, 364, 332, 349, 202, 685, 542, 157, 289, 426, 483,   0, 336},
         {121, 518, 142,  84, 297,  35,  29,  36, 236, 390, 238, 301,  55,  96, 153, 336,   0}},
         nVertices = sizeof(graph[0])/sizeof(graph[0][0]);
-    ACO solver(nVertices, 35);
+    ACO solver(nVertices, 100);
     for (int i = 0; i < nVertices; ++i) {
         for (int j = 0; j < nVertices; ++j) {
             solver.addEdge(i, j, graph[i][j]);
